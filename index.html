@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rootine — habit tracker terminal-style. Tanpa akun, tanpa langganan.</title>
+<meta name="description" content="Rootine adalah habit tracker bergaya terminal untuk Android dan web. Data tersimpan di HP kamu sendiri, 10 tema, 91 template kebiasaan, XP &amp; achievement, sync Telegram gratis. Sekali bayar, bukan langganan.">
+<meta name="theme-color" content="#0a0f0a">
+<meta property="og:title" content="Rootine — habit tracker terminal-style">
+<meta property="og:description" content="Tanpa akun. Tanpa langganan. Data di HP kamu sendiri.">
+<meta property="og:type" content="website">
+<link rel="icon" href="icon.png">
+<style>
+:root{
+  --bg:#0a0f0a; --bg2:#0e150e; --panel:#101810; --fg:#b8f5c8; --dim:#5a8a6a;
+  --accent:#33ff66; --accent2:#22cc55; --border:#1a2e1f; --muted:#3d5c48;
+  --warn:#ffcc55; --danger:#ff5555;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--mono);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);
+  opacity:.35;mix-blend-mode:multiply;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;position:relative;z-index:2}
+h1,h2,h3{line-height:1.2;margin:0}
+code{background:var(--bg2);border:1px solid var(--border);padding:1px 6px;border-radius:3px;font-size:.9em;color:var(--accent)}
+
+/* ---------- nav ---------- */
+header{
+  position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);
+  background:rgba(10,15,10,.92);backdrop-filter:blur(10px);
+}
+.nav{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;color:var(--fg)}
+.brand svg{width:22px;height:22px;color:var(--accent)}
+.brand b{color:var(--accent);font-weight:700}
+.nav-links{display:flex;gap:22px;margin-left:auto;font-size:13.5px}
+.nav-links a{color:var(--dim)}
+.nav-links a:hover{color:var(--accent);text-decoration:none}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:0 20px;border-radius:var(--r);border:1px solid var(--border);
+  background:var(--bg2);color:var(--fg);font:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;transition:.15s;text-decoration:none!important;white-space:nowrap;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#06210d;box-shadow:0 0 0 rgba(51,255,102,0)}
+.btn-primary:hover{background:#5cff88;border-color:#5cff88;color:#06210d;box-shadow:0 8px 30px rgba(51,255,102,.25)}
+.btn-sm{min-height:44px;padding:0 16px;font-size:13.5px}
+@media(max-width:820px){.nav-links{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:74px 0 60px;position:relative}
+.hero::after{
+  content:'';position:absolute;top:-160px;left:50%;transform:translateX(-50%);
+  width:900px;height:520px;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(51,255,102,.13),transparent 72%);
+}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent);border:1px solid var(--border);
+  background:var(--bg2);padding:7px 13px;border-radius:999px;margin-bottom:24px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-size:clamp(31px,6vw,58px);letter-spacing:-.02em;max-width:19ch}
+.hero h1 .hl{color:var(--accent);position:relative}
+.hero h1 .hl::after{
+  content:'';position:absolute;left:0;right:0;bottom:.06em;height:.14em;
+  background:var(--accent);opacity:.22;border-radius:2px;
+}
+.sub{color:var(--dim);font-size:clamp(15px,2.2vw,18.5px);max-width:58ch;margin:22px 0 32px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.meta{color:var(--muted);font-size:12.5px;margin-top:16px}
+
+/* ---------- terminal mock ---------- */
+.term{
+  margin-top:52px;border:1px solid var(--border);border-radius:6px;background:var(--panel);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden;
+}
+.term-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.term-bar i:nth-child(1){background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar span{margin-left:8px;color:var(--muted);font-size:12px}
+.term-body{padding:20px 22px;font-size:13.5px;line-height:2}
+.term-body .c{color:var(--muted)}
+.term-body .g{color:var(--accent)}
+.term-body .y{color:var(--warn)}
+.term-body .d{color:var(--dim)}
+.bar{display:inline-block;height:9px;background:var(--accent2);border-radius:2px;vertical-align:middle;opacity:.85}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--accent);vertical-align:-2px;animation:blink 1.05s steps(1) infinite}
+@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+
+/* ---------- sections ---------- */
+section{padding:76px 0;position:relative;z-index:2}
+.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
+h2{font-size:clamp(25px,4vw,38px);letter-spacing:-.01em;margin-bottom:14px}
+.lede{color:var(--dim);max-width:62ch;font-size:16px}
+.hr{height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);margin:0}
+
+/* ---------- screenshots ---------- */
+.shots{display:flex;gap:26px;overflow-x:auto;padding:34px 4px 18px;scroll-snap-type:x mandatory}
+.shots::-webkit-scrollbar{height:8px}
+.shots::-webkit-scrollbar-track{background:var(--bg2);border-radius:4px}
+.shots::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.phone{flex:0 0 auto;scroll-snap-align:center;width:270px}
+.phone .frame{
+  border:1px solid var(--border);border-radius:20px;overflow:hidden;background:var(--panel);
+  box-shadow:0 20px 50px rgba(0,0,0,.55);transition:.25s;
+}
+.phone:hover .frame{transform:translateY(-6px);border-color:var(--accent2);box-shadow:0 26px 60px rgba(51,255,102,.14)}
+.phone img{display:block;width:100%;height:auto}
+.phone p{text-align:center;color:var(--muted);font-size:12.5px;margin:12px 0 0}
+.phone p b{color:var(--fg);display:block;font-size:13.5px;margin-bottom:2px}
+
+/* ---------- feature grid ---------- */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));margin-top:40px}
+.card{
+  border:1px solid var(--border);background:var(--panel);border-radius:6px;padding:22px;
+  transition:.2s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:var(--accent2);transform:translateY(-3px)}
+.card .ic{color:var(--accent);margin-bottom:13px;display:block}
+.card h3{font-size:15.5px;margin-bottom:7px;color:var(--fg)}
+.card p{margin:0;color:var(--dim);font-size:13.5px;line-height:1.6}
+.card .tag{position:absolute;top:16px;right:16px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--border);padding:2px 7px;border-radius:3px}
+
+/* ---------- themes ---------- */
+.themes{display:flex;flex-wrap:wrap;gap:11px;margin-top:30px}
+.sw{
+  display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:var(--panel);
+  padding:11px 15px;border-radius:var(--r);font-size:13px;cursor:default;transition:.18s;
+}
+.sw:hover{border-color:var(--accent2);transform:translateY(-2px)}
+.sw i{width:15px;height:15px;border-radius:3px;display:block;border:1px solid rgba(255,255,255,.14)}
+.sw span{color:var(--dim)}
+
+/* ---------- split (privacy) ---------- */
+.split{display:grid;gap:34px;grid-template-columns:1fr 1fr;align-items:center}
+@media(max-width:820px){.split{grid-template-columns:1fr}}
+.list{list-style:none;padding:0;margin:22px 0 0}
+.list li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;font-size:14.5px;color:var(--dim)}
+.list li svg{flex:0 0 auto;margin-top:3px;color:var(--accent)}
+.list li b{color:var(--fg);font-weight:700}
+.panelbox{border:1px solid var(--border);background:var(--panel);border-radius:6px;padding:24px;font-size:13px;line-height:1.9}
+.panelbox .k{color:var(--accent)}
+.panelbox .c{color:var(--muted)}
+
+/* ---------- pricing ---------- */
+.plans{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));margin-top:40px;align-items:start}
+.plan{border:1px solid var(--border);background:var(--panel);border-radius:6px;padding:26px;position:relative}
+.plan.feat{border-color:var(--accent);box-shadow:0 0 0 1px rgba(51,255,102,.18),0 24px 60px rgba(51,255,102,.1)}
+.plan .ribbon{
+  position:absolute;top:-11px;left:26px;background:var(--accent);color:#06210d;
+  font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:3px;
+}
+.plan h3{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.price{font-size:40px;font-weight:700;color:var(--fg);letter-spacing:-.02em;line-height:1}
+.price small{font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0}
+.plan .note{color:var(--muted);font-size:12.5px;margin:12px 0 20px}
+.plan ul{list-style:none;padding:0;margin:0 0 24px}
+.plan li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:13.5px;color:var(--dim)}
+.plan li svg{flex:0 0 auto;margin-top:3px}
+.plan li.ok svg{color:var(--accent)}
+.plan li.no{color:var(--muted)}
+.plan li.no svg{color:var(--muted)}
+.plan .btn{width:100%}
+
+/* ---------- faq ---------- */
+.faq{margin-top:36px;border-top:1px solid var(--border)}
+details{border-bottom:1px solid var(--border)}
+summary{
+  cursor:pointer;padding:19px 0;font-size:15.5px;font-weight:700;color:var(--fg);
+  list-style:none;display:flex;align-items:center;gap:12px;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'$';color:var(--accent);font-weight:400}
+summary::after{content:'+';margin-left:auto;color:var(--accent);font-size:19px;transition:.2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0 0 20px 26px;color:var(--dim);font-size:14.5px;max-width:70ch}
+
+/* ---------- final cta ---------- */
+.final{
+  border:1px solid var(--border);border-radius:8px;padding:52px 34px;text-align:center;
+  background:linear-gradient(180deg,rgba(51,255,102,.07),transparent 70%);position:relative;overflow:hidden;
+}
+.final h2{max-width:22ch;margin:0 auto 16px}
+.final .lede{margin:0 auto 30px}
+.final .cta{justify-content:center}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--border);padding:34px 0 44px;color:var(--muted);font-size:12.5px}
+footer .row{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+footer a{color:var(--dim)}
+footer a:hover{color:var(--accent)}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .cursor,.dot{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20V9"/><path d="M12 9a6 6 0 0 0-6-6 6 6 0 0 0 6 6Z"/><path d="M12 9a6 6 0 0 1 6-6 6 6 0 0 1-6 6Z"/></svg>
+      <span>rootine<b>_</b></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#tampilan">Tampilan</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#privasi">Privasi</a>
+      <a href="#harga">Harga</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#harga">Ambil Rootine</a>
+  </div>
+</header>
+
+<main id="top">
+<div class="wrap">
+  <section class="hero">
+    <div class="badge"><i class="dot"></i> v1.1.0 · Android APK + Web PWA</div>
+    <h1>Habit tracker yang <span class="hl">nggak bikin kamu bolos.</span></h1>
+    <p class="sub">
+      Rootine tampil seperti terminal: gelap, tenang, tanpa distraksi. Sekali tap buat catat kebiasaan,
+      lihat streak dan XP naik, lalu tutup. Data-nya <b>tinggal di HP kamu sendiri</b> —
+      nggak ada akun, nggak ada langganan, nggak ada iklan.
+    </p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#harga">Download APK — 5,7 MB</a>
+      <a class="btn" href="#tampilan">Lihat tampilannya</a>
+    </div>
+    <p class="meta">Android 7+ · juga jalan di browser sebagai PWA · tanpa tracking · offline-first</p>
+
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>~/rootine — hari ini</span></div>
+      <div class="term-body">
+        <div><span class="c">$</span> rootine status</div>
+        <div class="d">sen 13 okt · streak 34 hari <span class="g">▲</span></div>
+        <div><span class="g">[✓]</span> olahraga pagi <span class="c">·····</span> <span class="g">14 hari</span></div>
+        <div><span class="g">[5/8]</span> minum air <span class="bar" style="width:62px"></span> <span class="c">5 dari 8</span></div>
+        <div><span class="g">[30/30]</span> baca buku <span class="bar" style="width:96px"></span> <span class="g">selesai</span></div>
+        <div><span class="y">[ ]</span> jurnal malam <span class="c">····· belum</span></div>
+        <div class="d">xp 4.820 · level 12 · 4 achievement <span class="cursor"></span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section id="tampilan">
+    <div class="eyebrow reveal">// tampilan asli</div>
+    <h2 class="reveal">Screenshot asli dari aplikasinya</h2>
+    <p class="lede reveal">Nggak ada mockup. Ini hasil tangkapan layar dari build v1.1.0 yang kamu install.</p>
+    <div class="shots">
+      <div class="phone"><div class="frame"><img src="shots/after-mobile-today.jpg" alt="Layar hari ini Rootine" loading="lazy"></div><p><b>Hari ini</b>streak, progres, sekali tap</p></div>
+      <div class="phone"><div class="frame"><img src="shots/after-mobile-stats.jpg" alt="Layar statistik Rootine" loading="lazy"></div><p><b>Statistik</b>heatmap, konsistensi, tren</p></div>
+      <div class="phone"><div class="frame"><img src="shots/after-mobile-all.jpg" alt="Daftar semua kebiasaan" loading="lazy"></div><p><b>Semua kebiasaan</b>geser untuk arsip/hapus</p></div>
+      <div class="phone"><div class="frame"><img src="shots/after-mobile-journal.jpg" alt="Layar jurnal Rootine" loading="lazy"></div><p><b>Jurnal</b>catatan harian yang bisa dicari</p></div>
+      <div class="phone"><div class="frame"><img src="shots/after-mobile-today-dracula.jpg" alt="Tema dracula" loading="lazy"></div><p><b>Ganti tema</b>10 tema, satu tap</p></div>
+      <div class="phone"><div class="frame"><img src="shots/after-desktop-today.jpg" alt="Rootine di desktop" loading="lazy"></div><p><b>Desktop &amp; tablet</b>layout melebar otomatis</p></div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section id="fitur">
+    <div class="eyebrow reveal">// fitur</div>
+    <h2 class="reveal">Yang benar-benar kamu pakai tiap hari</h2>
+    <p class="lede reveal">Bukan daftar fitur buat jualan. Semua ini ada di APK-nya dan sudah jalan.</p>
+
+    <div class="grid">
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>5 mode pencatatan</h3>
+        <p>checkbox (ya/tidak), counter (5 dari 8 gelas), number (halaman, km), timer (menit fokus + pomodoro), dan jurnal teks. Satu kebiasaan, satu mode yang paling pas.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg>
+        <h3>Streak, XP &amp; level</h3>
+        <p>Tiap centang dapat 10 XP. Level naik makin lama makin berat, jadi nggak habis dalam seminggu. Ada shield untuk jaga streak pas kamu sakit atau sibuk.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <h3>Heatmap &amp; statistik</h3>
+        <p>Peta konsistensi setahun, tingkat penyelesaian per kebiasaan, tren mingguan, dan hari paling rajin kamu. Semua dihitung di HP, tanpa kirim data ke mana-mana.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <h3>91 template siap pakai</h3>
+        <p>Malas mikir mau mulai dari mana? Tinggal pilih paket: Pagi, Workout, Belajar, Kesehatan, Malam, Produktivitas, atau Minimal — langsung jadi daftar kebiasaan.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 3"/></svg>
+        <h3>Jadwal fleksibel</h3>
+        <p>Harian, hari tertentu, atau “4× seminggu”. Rootine ngerti bedanya kebiasaan yang harus tiap hari dan yang boleh fleksibel — streak-nya dihitung adil.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg>
+        <h3>Sync Telegram — gratis</h3>
+        <p>Backup otomatis ke bot Telegram kamu sendiri. Nggak perlu bayar cloud, nggak perlu daftar server. Ganti HP, data balik dalam hitungan detik.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>
+        <h3>10 tema, termasuk terang</h3>
+        <p>matrix, dracula, nord, tokyo night, catppuccin, gruvbox, one dark, monokai, amber CRT, dan paper (terang). Bukan cuma warna aksen — semuanya diganti.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        <h3>Backup &amp; restore JSON</h3>
+        <p>Satu file JSON berisi seluruh riwayatmu. Simpan di Google Drive, flashdisk, atau kirim ke diri sendiri. Nggak ada yang bisa mengunci datamu.</p>
+      </div>
+      <div class="card reveal">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <h3>Offline penuh</h3>
+        <p>Nggak butuh internet sama sekali. Di pesawat, di gunung, di daerah sinyal jelek — catat tetap jalan. Sinkronisasi cuma saat kamu mau.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section>
+    <div class="eyebrow reveal">// tema</div>
+    <h2 class="reveal">Bikin mata betah</h2>
+    <p class="lede reveal">Pilih satu, atau ganti tiap minggu sesuai mood. Semua tema termasuk di paket gratis.</p>
+    <div class="themes">
+      <div class="sw"><i style="background:#33ff66"></i><span>matrix</span></div>
+      <div class="sw"><i style="background:#bd93f9"></i><span>dracula</span></div>
+      <div class="sw"><i style="background:#88c0d0"></i><span>nord</span></div>
+      <div class="sw"><i style="background:#7aa2f7"></i><span>tokyo night</span></div>
+      <div class="sw"><i style="background:#cba6f7"></i><span>catppuccin</span></div>
+      <div class="sw"><i style="background:#d79921"></i><span>gruvbox</span></div>
+      <div class="sw"><i style="background:#61afef"></i><span>one dark</span></div>
+      <div class="sw"><i style="background:#f92672"></i><span>monokai</span></div>
+      <div class="sw"><i style="background:#ffb000"></i><span>amber crt</span></div>
+      <div class="sw"><i style="background:#e8e4d8"></i><span>paper (terang)</span></div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section id="privasi">
+    <div class="split">
+      <div class="reveal">
+        <div class="eyebrow">// privasi</div>
+        <h2>Datamu bukan produk siapa-siapa</h2>
+        <p class="lede">App habit tracker lain menjual paket langganan supaya kamu bisa lihat data yang <em>kamu sendiri</em> bikin. Rootine kebalikannya.</p>
+        <ul class="list">
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada akun.</b> Nggak perlu email, nomor HP, atau login Google buat pakai.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada server kami.</b> Aplikasinya nggak pernah ngirim datamu ke tempat kami, karena tempatnya nggak ada.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada analytics.</b> Nggak ada pelacak iklan, nggak ada SDK pihak ketiga.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Izin minimal.</b> Cuma internet (buat sync opsional). Nggak minta kontak, lokasi, kamera.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Kalau kamu berhenti, kamu tetap punya semuanya.</b> Export JSON kapan saja, buka di app apa pun.</span></li>
+        </ul>
+      </div>
+      <div class="panelbox reveal">
+        <div><span class="c">$</span> rootine --where-is-my-data</div>
+        <div>&nbsp;</div>
+        <div><span class="k">lokal</span> &nbsp;→ localStorage HP kamu</div>
+        <div><span class="k">backup</span> → file JSON, kamu yang simpan</div>
+        <div><span class="k">sync</span> &nbsp;&nbsp;→ bot Telegram kamu sendiri (opsional)</div>
+        <div><span class="k">server kami</span> → <span class="c">tidak ada</span></div>
+        <div><span class="k">dijual ke pihak ketiga</span> → <span class="c">tidak ada</span></div>
+        <div>&nbsp;</div>
+        <div class="c">$ rootine --harga</div>
+        <div><span class="k">langganan</span> → <span class="c">nggak ada. sekali bayar, milikmu.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section id="harga">
+    <div class="eyebrow reveal">// harga</div>
+    <h2 class="reveal">Sekali bayar. Bukan langganan.</h2>
+    <p class="lede reveal">Aku nggak mau nagih kamu tiap bulan buat sesuatu yang jalan di HP kamu sendiri. Jadi harganya sekali, dan setelah itu terserah kamu.</p>
+
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>Gratis</h3>
+        <div class="price">Rp0</div>
+        <p class="note">Buat kamu yang mau coba dulu. Nggak ada batas waktu.</p>
+        <ul>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Semua 5 mode pencatatan</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>10 tema termasuk yang terang</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>91 template kebiasaan</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Streak, XP, level, achievement</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Export / import backup JSON</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Web PWA — buka di browser HP mana pun</li>
+          <li class="no"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>Sync Telegram otomatis</li>
+        </ul>
+        <a class="btn" href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Buka versi web</a>
+      </div>
+
+      <div class="plan feat reveal">
+        <div class="ribbon">Paling pas</div>
+        <h3>Supporter</h3>
+        <div class="price">Rp49.000 <small>sekali</small></div>
+        <p class="note">Semua fitur gratis, plus yang bikin data kamu aman. Sekali bayar, pakai selamanya di HP kamu.</p>
+        <ul>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Semua fitur di paket Gratis</b></li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Sync Telegram otomatis</b> — backup ke bot kamu sendiri</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Restore dari backup kapan saja</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Update versi berikutnya</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>APK langsung — nggak lewat Play Store</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Bantu development — ini app satu orang</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Nggak ada langganan bulanan</b></li>
+        </ul>
+        <a class="btn btn-primary" href="https://t.me/waalidperfume" target="_blank" rel="noopener">Chat aku buat beli</a>
+        <p class="note" style="margin:14px 0 0;text-align:center">Transfer bank / QRIS. APK dikirim langsung.</p>
+      </div>
+
+      <div class="plan reveal">
+        <h3>Sekali lihat, kok</h3>
+        <div class="price" style="font-size:26px;line-height:1.3">Coba dulu.<br>Nggak cocok?<br>Nggak usah bayar.</div>
+        <p class="note" style="margin-top:16px">Seriusan. Install yang gratis, pakai seminggu. Kalau ternyata kepakai tiap hari, baru pikir soal sync-nya. Aku nggak mau jual sesuatu yang belum kamu butuh.</p>
+        <a class="btn" href="#faq">Baca pertanyaan umum</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="hr"></div>
+
+<div class="wrap">
+  <section id="faq">
+    <div class="eyebrow reveal">// pertanyaan umum</div>
+    <h2 class="reveal">Jawaban jujur, tanpa muter</h2>
+    <div class="faq">
+      <details class="reveal" open>
+        <summary>Kenapa nggak di Play Store?</summary>
+        <p>App ini satu orang yang bikin. Play Store butuh biaya developer tahunan, review, dan data pribadi buat akun developer — semua itu bikin harga naik dan rilis jadi lambat. Lewat APK langsung, kamu dapat update lebih cepat dan aku nggak perlu naikin harga buat nutup biaya toko. Kalau kamu ragu install APK dari luar Play Store: kamu bisa cek sendiri APK-nya (signing key-nya tetap, <code>com.waalid.rootine</code>), atau pakai versi web dulu.</p>
+      </details>
+      <details class="reveal">
+        <summary>Apakah data aku aman kalau HP-nya hilang?</summary>
+        <p>Data utama ada di HP kamu. Makanya ada dua lapis pengaman: (1) export file JSON kapan saja — simpan di Google Drive atau kirim ke diri sendiri, dan (2) sync Telegram otomatis (paket Supporter) yang ngirim backup ke bot Telegram milikmu sendiri, jadi salinannya ada di cloud Telegram pribadimu, bukan di server pihak lain. Kalau HP hilang, tinggal install ulang dan restore.</p>
+      </details>
+      <details class="reveal">
+        <summary>Sync Telegram itu apa? Kenapa gratis?</summary>
+        <p>Kamu bikin bot Telegram sendiri (gratis, 2 menit lewat @BotFather), masukkan token-nya ke Rootine, dan app-nya akan kirim file backup ke chat bot itu. Telegram gratis buat file seperti ini, jadi nggak ada biaya server yang perlu aku bebankan ke kamu. Nggak ada data yang lewat komputer aku.</p>
+      </details>
+      <details class="reveal">
+        <summary>Bisa dipakai di iPhone?</summary>
+        <p>Versi web PWA-nya jalan di Safari iPhone dan bisa dipasang ke layar utama. Tapi APK-nya khusus Android. Fitur sync-nya sama di dua-duanya.</p>
+      </details>
+      <details class="reveal">
+        <summary>Kalau versi barunya keluar, aku dapat otomatis?</summary>
+        <p>Pembeli paket Supporter dapat update versi berikutnya tanpa bayar lagi. Buat versi gratis, kamu bisa pakai web PWA yang selalu versi terbaru.</p>
+      </details>
+      <details class="reveal">
+        <summary>Harga Rp49.000 itu masuk akal nggak dibanding app lain?</summary>
+        <p>Bandingkan begini: app habit tracker berlangganan biasanya Rp25.000–Rp150.000 <em>per bulan</em>. Setahun berarti Rp300.000 ke atas, dan berhenti bayar berarti kehilangan akses ke data yang kamu sendiri bikin. Rootine sekali bayar Rp49.000 — dan datanya tetap milikmu, di HP kamu, dalam bentuk file JSON yang bisa kamu buka tanpa app-nya.</p>
+      </details>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section>
+    <div class="final reveal">
+      <div class="eyebrow">// mulai</div>
+      <h2>Mulai dari satu kebiasaan hari ini</h2>
+      <p class="lede">Yang bikin kamu berubah bukan aplikasinya — tapi hari ke-30 pas kamu lihat streak-nya masih nyala. Rootine cuma jaga supaya kamu nggak lupa.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://t.me/waalidperfume" target="_blank" rel="noopener">Ambil APK — Rp49.000</a>
+        <a class="btn" href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Coba gratis di browser</a>
+      </div>
+      <p class="meta" style="margin-top:20px">v1.1.0 · Android 7+ · 5,7 MB · tanpa akun · tanpa langganan</p>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <div>rootine_ · habit tracker terminal-style · dibuat oleh <a href="https://t.me/waalidperfume" target="_blank" rel="noopener">@waalidperfume</a></div>
+    <div><a href="privacy.html">Privasi</a> · <a href="terms.html">Syarat</a> · <a href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Versi web</a></div>
+  </div>
+</footer>
+
+<script>
+// reveal on scroll — degrades to fully visible without JS/IO support
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('in'), i * 55); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  els.forEach(e => io.observe(e));
+})();
+// animated terminal bars on first paint
+(() => {
+  const bars = document.querySelectorAll('.bar');
+  bars.forEach((b, i) => {
+    const w = b.style.width; b.style.width = '0px';
+    setTimeout(() => { b.style.transition = 'width .9s ease'; b.style.width = w; }, 380 + i * 160);
+  });
+})();
+</script>
+</body>
+</html>
