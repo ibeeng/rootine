@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rootine — habit tracker terminal-style. Tanpa akun, tanpa langganan.</title>
+<title>Rootine — habit tracker terminal-style. Data di HP kamu, tanpa langganan.</title>
 <meta name="description" content="Rootine adalah habit tracker bergaya terminal untuk Android dan web. Data tersimpan di HP kamu sendiri, 10 tema, 91 template kebiasaan, XP &amp; achievement, sync Telegram gratis. Sekali bayar, bukan langganan.">
 <meta name="theme-color" content="#0a0f0a">
 <meta property="og:title" content="Rootine — habit tracker terminal-style">
-<meta property="og:description" content="Tanpa akun. Tanpa langganan. Data di HP kamu sendiri.">
+<meta property="og:description" content="Login sekali pakai Google, data habit tetap di HP kamu sendiri. Tanpa langganan, tanpa iklan.">
 <meta property="og:type" content="website">
 <link rel="icon" href="icon.png">
 <style>
@@ -240,8 +240,8 @@ footer a:hover{color:var(--accent)}
     <h1>Habit tracker yang <span class="hl">nggak bikin kamu bolos.</span></h1>
     <p class="sub">
       Rootine tampil seperti terminal: gelap, tenang, tanpa distraksi. Sekali tap buat catat kebiasaan,
-      lihat streak dan XP naik, lalu tutup. Data-nya <b>tinggal di HP kamu sendiri</b> —
-      nggak ada akun, nggak ada langganan, nggak ada iklan. Ada versi baru? Muncul notifikasi
+      lihat streak dan XP naik, lalu tutup. Login sekali pakai Google buat gerbang masuk —
+      datanya sendiri <b>tinggal di HP kamu sendiri</b>, nggak ada langganan, nggak ada iklan. Ada versi baru? Muncul notifikasi
       di aplikasi, sekali tap langsung terpasang — <b>tanpa install ulang</b>.
     </p>
     <div class="cta">
@@ -336,7 +336,7 @@ footer a:hover{color:var(--accent)}
       <div class="card reveal">
         <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
         <h3>Offline penuh</h3>
-        <p>Nggak butuh internet sama sekali. Di pesawat, di gunung, di daerah sinyal jelek — catat tetap jalan. Sinkronisasi cuma saat kamu mau.</p>
+        <p>Login butuh internet sekali, sisanya nggak. Di pesawat, di gunung, di daerah sinyal jelek — catat tetap jalan. Sinkronisasi cuma saat kamu mau.</p>
       </div>
     </div>
   </section>
@@ -374,10 +374,10 @@ footer a:hover{color:var(--accent)}
         <h2>Datamu bukan produk siapa-siapa</h2>
         <p class="lede">App habit tracker lain menjual paket langganan supaya kamu bisa lihat data yang <em>kamu sendiri</em> bikin. Rootine kebalikannya.</p>
         <ul class="list">
-          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada akun.</b> Nggak perlu email, nomor HP, atau login Google buat pakai.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Login Google cuma gerbang.</b> Sekali buat masuk — nggak ada akun Rootine, nggak perlu bikin password. Yang kami terima cuma nama, email, dan foto profil dari Google.</span></li>
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada server kami.</b> Aplikasinya nggak pernah ngirim datamu ke tempat kami, karena tempatnya nggak ada.</span></li>
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Nggak ada analytics.</b> Nggak ada pelacak iklan, nggak ada SDK pihak ketiga.</span></li>
-          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Izin minimal.</b> Cuma internet (buat sync opsional). Nggak minta kontak, lokasi, kamera.</span></li>
+          <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Izin minimal.</b> Cuma internet (buat login sekali &amp; sync opsional). Nggak minta kontak, lokasi, kamera.</span></li>
           <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>Kalau kamu berhenti, kamu tetap punya semuanya.</b> Export JSON kapan saja, buka di app apa pun.</span></li>
         </ul>
       </div>
@@ -463,6 +463,10 @@ footer a:hover{color:var(--accent)}
         <p>App ini satu orang yang bikin. Play Store butuh biaya developer tahunan, review, dan data pribadi buat akun developer — semua itu bikin harga naik dan rilis jadi lambat. Lewat APK langsung, kamu dapat update lebih cepat dan aku nggak perlu naikin harga buat nutup biaya toko. Kalau kamu ragu install APK dari luar Play Store: kamu bisa cek sendiri APK-nya (signing key-nya tetap, <code>com.ibedes.rootine</code>), atau pakai versi web dulu.</p>
       </details>
       <details class="reveal">
+        <summary>Kalau data lokal, kenapa harus login Google?</summary>
+        <p>Login Google cuma gerbang masuk. Rootine nggak punya sistem akun sendiri — nggak ada yang perlu kamu daftarin, nggak ada password buat diingat. Yang diterima cuma nama, email, dan foto profil dari Google buat nge-bedain perangkatmu, dan itu disimpan lokal di HP kamu. Data habit-nya sendiri nggak pernah lewat server kami; begitu login, semuanya jalan offline.</p>
+      </details>
+      <details class="reveal">
         <summary>Apakah data aku aman kalau HP-nya hilang?</summary>
         <p>Data utama ada di HP kamu. Makanya ada dua lapis pengaman: (1) export file JSON kapan saja — simpan di Google Drive atau kirim ke diri sendiri, dan (2) sync Telegram otomatis (paket Supporter) yang ngirim backup ke bot Telegram milikmu sendiri, jadi salinannya ada di cloud Telegram pribadimu, bukan di server pihak lain. Kalau HP hilang, tinggal install ulang dan restore.</p>
       </details>
@@ -496,7 +500,7 @@ footer a:hover{color:var(--accent)}
         <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK — 6,4 MB</a>
         <a class="btn" href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Coba di browser dulu</a>
       </div>
-      <p class="meta" style="margin-top:20px">v1.2.0 · Android 7+ · 6,4 MB · tanpa akun · tanpa langganan</p>
+      <p class="meta" style="margin-top:20px">v1.2.0 · Android 7+ · 6,4 MB · login sekali · tanpa langganan</p>
     </div>
   </section>
 </div>

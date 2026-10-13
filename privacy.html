@@ -81,19 +81,20 @@
     <div class="wrap">
       <header>
         <h1>rootine — privacy policy</h1>
-        <div class="meta">terakhir diperbarui: 24 September 2026</div>
+        <div class="meta">terakhir diperbarui: 13 Oktober 2026</div>
       </header>
 
       <p>
         Kebijakan Privasi ini menjelaskan bagaimana <strong>Rootine</strong>
         ("kami") memproses informasi saat kamu menggunakan aplikasi habit tracker kami
-        yang tersedia di <code>https://ibeeng.github.io/habit-tracker/</code> ("Layanan").
+        yang tersedia di <code>https://ibeeng.github.io/habit-tracker/</code> (web/PWA)
+        dan sebagai APK Android ("Layanan").
       </p>
 
       <div class="panel">
         <strong>Ringkasan singkat:</strong>
         <ul>
-          <li>Data habit disimpan di <em>browser kamu sendiri</em> (localStorage) — bukan di server kami.</li>
+          <li>Data habit disimpan di <em>perangkat kamu sendiri</em> (localStorage) — bukan di server kami.</li>
           <li>Login pakai Google hanya untuk verifikasi identitas — kami tidak menyimpan password.</li>
           <li>Kami <strong>tidak menjual</strong> data kamu ke pihak mana pun.</li>
           <li>Sync (Telegram) bersifat <strong>opsional</strong> dan hanya aktif jika kamu mengaktifkannya.</li>
@@ -111,7 +112,7 @@
       <p><strong>b. Data habit (lokal)</strong></p>
       <ul>
         <li>Nama habit, jadwal, progres, streak, XP, shield, preferensi tema</li>
-        <li>Disimpan di <code>localStorage</code> browser pada perangkat kamu</li>
+        <li>Disimpan di <code>localStorage</code> pada perangkat kamu (browser atau aplikasi)</li>
         <li>Tidak dikirim ke server Rootine</li>
       </ul>
 
@@ -119,7 +120,7 @@
       <ul>
         <li>
           <strong>Telegram:</strong> jika kamu menghubungkan bot Telegram milikmu sendiri,
-          data habit dikirim sebagai file JSON ke chat bot tersebut. Token bot disimpan lokal di browser kamu.
+          data habit dikirim sebagai file JSON ke chat bot tersebut. Token bot disimpan lokal di perangkat kamu.
         </li>
       </ul>
 
@@ -132,8 +133,8 @@
 
       <h2>3. Penyimpanan &amp; keamanan</h2>
       <ul>
-        <li>Data habit utama: localStorage browser (perangkat)</li>
-        <li>Sesi login: localStorage browser (token kedaluwarsa mengikuti token Google)</li>
+        <li>Data habit utama: localStorage perangkat kamu (browser / aplikasi)</li>
+        <li>Sesi login: localStorage perangkat kamu (bertahan sampai kamu sign out sendiri)</li>
         <li>Data sync: di penyimpanan milik kamu sendiri (Telegram), bukan server kami</li>
         <li>Kami tidak mengoperasikan basis data server yang menyimpan data habit kamu</li>
       </ul>
