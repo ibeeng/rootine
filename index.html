@@ -60,7 +60,8 @@ header{
 @media(max-width:820px){.nav-links{display:none}}
 
 /* ---------- hero ---------- */
-.hero{padding:74px 0 60px;position:relative}
+.hero{padding:74px 0 60px;position:relative;overflow-x:clip} /* clip: glow ::after is 900px wide — without this it
+  creates phantom horizontal scroll on phones (<900px viewports); 'clip' doesn't force overflow-y like 'hidden' */
 .hero::after{
   content:'';position:absolute;top:-160px;left:50%;transform:translateX(-50%);
   width:900px;height:520px;pointer-events:none;
@@ -180,12 +181,13 @@ h2{font-size:clamp(25px,4vw,38px);letter-spacing:-.01em;margin-bottom:14px}
 .faq{margin-top:36px;border-top:1px solid var(--border)}
 details{border-bottom:1px solid var(--border)}
 summary{
-  cursor:pointer;padding:19px 0;font-size:15.5px;font-weight:700;color:var(--fg);
+  cursor:pointer;padding:19px 0 19px 0;padding-right:8px;font-size:15.5px;font-weight:700;color:var(--fg);
   list-style:none;display:flex;align-items:center;gap:12px;
-}
+} /* padding-right 8px: room for the 45deg-rotated '+' (bbox 24*sqrt2≈34px) without overflow */
 summary::-webkit-details-marker{display:none}
 summary::before{content:'$';color:var(--accent);font-weight:400}
-summary::after{content:'+';margin-left:auto;color:var(--accent);font-size:19px;transition:.2s}
+summary::after{content:'+';margin-left:auto;color:var(--accent);font-size:19px;transition:.2s;
+  width:24px;text-align:center;flex:none} /* fixed box: the 45deg rotation of '+' otherwise overflows the item ~9px */
 details[open] summary::after{transform:rotate(45deg)}
 details p{margin:0 0 20px 26px;color:var(--dim);font-size:14.5px;max-width:70ch}
 
@@ -234,15 +236,16 @@ footer a:hover{color:var(--accent)}
 <main id="top">
 <div class="wrap">
   <section class="hero">
-    <div class="badge"><i class="dot"></i> v1.1.0 · Android APK + Web PWA</div>
+    <div class="badge"><i class="dot"></i> v1.2.0 · Android APK + Web PWA</div>
     <h1>Habit tracker yang <span class="hl">nggak bikin kamu bolos.</span></h1>
     <p class="sub">
       Rootine tampil seperti terminal: gelap, tenang, tanpa distraksi. Sekali tap buat catat kebiasaan,
       lihat streak dan XP naik, lalu tutup. Data-nya <b>tinggal di HP kamu sendiri</b> —
-      nggak ada akun, nggak ada langganan, nggak ada iklan.
+      nggak ada akun, nggak ada langganan, nggak ada iklan. Ada versi baru? Muncul notifikasi
+      di aplikasi, sekali tap langsung terpasang — <b>tanpa install ulang</b>.
     </p>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.1.0/Rootine-1.1.0.apk">Download APK — 5,7 MB</a>
+      <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK — 6,4 MB</a>
       <a class="btn" href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Coba di browser dulu</a>
     </div>
     <p class="meta">Android 7+ · juga jalan di browser sebagai PWA · tanpa tracking · offline-first</p>
@@ -268,13 +271,14 @@ footer a:hover{color:var(--accent)}
   <section id="tampilan">
     <div class="eyebrow reveal">// tampilan asli</div>
     <h2 class="reveal">Screenshot asli dari aplikasinya</h2>
-    <p class="lede reveal">Nggak ada mockup. Ini hasil tangkapan layar dari build v1.1.0 yang kamu install.</p>
+    <p class="lede reveal">Nggak ada mockup. Ini hasil tangkapan layar dari build v1.2.0 yang kamu install.</p>
     <div class="shots">
       <div class="phone"><div class="frame"><img src="shots/apk-today.jpg" alt="Layar hari ini Rootine" loading="lazy"></div><p><b>Hari ini</b>streak, progres, sekali tap</p></div>
       <div class="phone"><div class="frame"><img src="shots/apk-stats.jpg" alt="Layar statistik Rootine" loading="lazy"></div><p><b>Statistik</b>heatmap, konsistensi, tren</p></div>
       <div class="phone"><div class="frame"><img src="shots/apk-all.jpg" alt="Daftar semua kebiasaan" loading="lazy"></div><p><b>Semua kebiasaan</b>geser untuk arsip/hapus</p></div>
       <div class="phone"><div class="frame"><img src="shots/apk-journal.jpg" alt="Layar jurnal Rootine" loading="lazy"></div><p><b>Jurnal</b>catatan harian yang bisa dicari</p></div>
       <div class="phone"><div class="frame"><img src="shots/apk-today-dracula.jpg" alt="Tema dracula" loading="lazy"></div><p><b>Ganti tema</b>10 tema, satu tap</p></div>
+      <div class="phone"><div class="frame"><img src="shots/apk-update.jpg" alt="Layar cek update di aplikasi" loading="lazy"></div><p><b>Cek update</b>sekali tap, tanpa install ulang</p></div>
       <div class="phone"><div class="frame"><img src="shots/after-desktop-today.jpg" alt="Rootine di desktop" loading="lazy"></div><p><b>Desktop &amp; tablet</b>layout melebar otomatis</p></div>
     </div>
   </section>
@@ -428,12 +432,12 @@ footer a:hover{color:var(--accent)}
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Semua fitur di paket Gratis</b></li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Sync Telegram otomatis</b> — backup ke bot kamu sendiri</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Restore dari backup kapan saja</li>
-          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Update versi berikutnya</li>
+          <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Update versi berikutnya — pasang dari dalam aplikasi</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>APK langsung — nggak lewat Play Store</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Bantu development — ini app satu orang</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">Nggak ada langganan bulanan</b></li>
         </ul>
-        <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.1.0/Rootine-1.1.0.apk">Download APK v1.1.0</a>
+        <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK v1.2.0</a>
         <p class="note" style="margin:14px 0 0;text-align:center">Dukung via <a href="https://t.me/waalidperfume" target="_blank" rel="noopener">Telegram</a> — transfer bank / QRIS. Sukarela, nggak wajib.</p>
       </div>
 
@@ -472,7 +476,7 @@ footer a:hover{color:var(--accent)}
       </details>
       <details class="reveal">
         <summary>Kalau versi barunya keluar, aku dapat otomatis?</summary>
-        <p>Pembeli paket Supporter dapat update versi berikutnya tanpa bayar lagi. Buat versi gratis, kamu bisa pakai web PWA yang selalu versi terbaru.</p>
+        <p>Pembeli paket Supporter dapat update versi berikutnya tanpa bayar lagi. Kalau ada versi baru, aplikasinya kasih tahu lewat notifikasi dan menu <b>cek update</b> — sekali tap, update terpasang tanpa install ulang APK (untuk perubahan web-nya; kalau ada perubahan native, aku tetap kasih file APK baru). Buat versi gratis, kamu bisa pakai web PWA yang selalu versi terbaru.</p>
       </details>
       <details class="reveal">
         <summary>Harga Rp49.000 itu masuk akal nggak dibanding app lain?</summary>
@@ -489,10 +493,10 @@ footer a:hover{color:var(--accent)}
       <h2>Mulai dari satu kebiasaan hari ini</h2>
       <p class="lede">Yang bikin kamu berubah bukan aplikasinya — tapi hari ke-30 pas kamu lihat streak-nya masih nyala. Rootine cuma jaga supaya kamu nggak lupa.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.1.0/Rootine-1.1.0.apk">Download APK — 5,7 MB</a>
+        <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK — 6,4 MB</a>
         <a class="btn" href="https://ibeeng.github.io/habit-tracker/" target="_blank" rel="noopener">Coba di browser dulu</a>
       </div>
-      <p class="meta" style="margin-top:20px">v1.1.0 · Android 7+ · 5,7 MB · tanpa akun · tanpa langganan</p>
+      <p class="meta" style="margin-top:20px">v1.2.0 · Android 7+ · 6,4 MB · tanpa akun · tanpa langganan</p>
     </div>
   </section>
 </div>
