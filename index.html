@@ -177,6 +177,25 @@ h2{font-size:clamp(25px,4vw,38px);letter-spacing:-.01em;margin-bottom:14px}
 .plan li.no svg{color:var(--muted)}
 .plan .btn{width:100%}
 
+/* ---------- pay what you can ---------- */
+.amt-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:2px 0 20px}
+.amt{
+  min-height:44px;padding:0 15px;border-radius:var(--r);border:1px solid var(--border);
+  background:var(--bg2);color:var(--fg);font:inherit;font-size:13.5px;font-weight:700;
+  cursor:pointer;transition:.15s;
+}
+.amt:hover{border-color:var(--accent);color:var(--accent)}
+.amt.on{background:var(--accent);border-color:var(--accent);color:#06210d}
+.amt-in{
+  min-height:44px;width:112px;padding:0 12px;border-radius:var(--r);
+  border:1px dashed var(--border);background:var(--bg2);color:var(--fg);
+  font:inherit;font-size:13.5px;transition:.15s;
+}
+.amt-in::placeholder{color:var(--muted)}
+.amt-in:focus{outline:none;border-style:solid;border-color:var(--accent)}
+.amt-in::-webkit-outer-spin-button,.amt-in::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.amt-in{appearance:textfield;-moz-appearance:textfield}
+
 /* ---------- faq ---------- */
 .faq{margin-top:36px;border-top:1px solid var(--border)}
 details{border-bottom:1px solid var(--border)}
@@ -402,7 +421,7 @@ footer a:hover{color:var(--accent)}
   <section id="harga">
     <div class="eyebrow reveal">// harga</div>
     <h2 class="reveal">Sekali bayar. Bukan langganan.</h2>
-    <p class="lede reveal">APK-nya gratis. Kalau kepakai, Rp49.000 sekali buat dukung development — sukarela, bukan syarat.</p>
+    <p class="lede reveal">APK-nya gratis. Mau dukung? Isi nominal sendiri — dari Rp10.000 atau seikhlasnya. Bukan syarat.</p>
 
     <div class="plans">
       <div class="plan reveal">
@@ -421,18 +440,25 @@ footer a:hover{color:var(--accent)}
       </div>
 
       <div class="plan feat reveal">
-        <div class="ribbon">Paling pas</div>
-        <h3>Supporter</h3>
-        <div class="price">Rp49.000 <small>sekali</small></div>
-        <p class="note">Download APK-nya gratis. Rp49.000 sekali kalau mau dukung — bukan langganan.</p>
+        <div class="ribbon">Pay what you can</div>
+        <h3>Dukung Rootine</h3>
+        <div class="price"><span id="amtShow">Rp49.000</span> <small>sekali</small></div>
+        <p class="note">Isi sendiri nominalnya — seikhlasnya. APK-nya tetap bisa di-download gratis.</p>
+        <div class="amt-row" role="group" aria-label="Pilih nominal dukungan">
+          <button type="button" class="amt" data-v="10000">Rp10.000</button>
+          <button type="button" class="amt" data-v="25000">Rp25.000</button>
+          <button type="button" class="amt on" data-v="49000">Rp49.000</button>
+          <input type="number" id="amtIn" class="amt-in" placeholder="bebas…" min="1000" max="100000000" inputmode="numeric" aria-label="Nominal dukungan lain">
+        </div>
         <ul>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg><b style="color:var(--fg)">APK Android</b> — semua fitur, termasuk sync Telegram</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Update dari dalam app, tanpa install ulang</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Bantu development satu orang ini</li>
           <li class="ok"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Fitur tetap terbuka walau nggak bayar</li>
         </ul>
-        <a class="btn btn-primary" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK v1.2.0</a>
-        <p class="note" style="margin:14px 0 0;text-align:center">Dukung via <a href="https://t.me/ibedestudio_bot?start=pay" target="_blank" rel="noopener">Telegram @ibedestudio_bot</a> — QRIS &amp; no. rekening langsung muncul di chat. Bayar pakai app bank / e-wallet. Sukarela, nggak wajib.</p>
+        <a class="btn btn-primary" id="payBtn" href="https://t.me/ibedestudio_bot?start=amt-49000" target="_blank" rel="noopener">Dukung Rp49.000 via Telegram</a>
+        <a class="btn" style="margin-top:10px" href="https://github.com/ibeeng/rootine/releases/download/v1.2.0/Rootine-1.2.0.apk">Download APK v1.2.0 — gratis</a>
+        <p class="note" style="margin:14px 0 0;text-align:center">Dibuka di <a href="https://t.me/ibedestudio_bot?start=amt-49000" target="_blank" rel="noopener">@ibedestudio_bot</a> — QRIS &amp; no. rekening langsung muncul, nominal pilihanmu ikut kebawa. Sukarela, nggak wajib.</p>
       </div>
 
       <div class="plan reveal">
@@ -477,12 +503,12 @@ footer a:hover{color:var(--accent)}
         <p>App-nya kasih tahu lewat notifikasi, sekali tap kelar — tanpa install ulang. Kalau perubahannya native, aku kasih file APK baru.</p>
       </details>
       <details class="reveal">
-        <summary>Gimana cara bayar Rp49.000-nya?</summary>
-        <p>Buka <a href="https://t.me/ibedestudio_bot?start=pay" target="_blank" rel="noopener">@ibedestudio_bot</a> di Telegram — QRIS &amp; no. rekening langsung dikirim, tinggal scan. Bayar lewat app bank / e-wallet apa aja. Nggak bayar pun app-nya tetap jalan penuh.</p>
+        <summary>Gimana cara bayarnya?</summary>
+        <p>Pilih nominal di atas (atau isi sendiri), klik tombol dukung — kamu langsung dibawa ke <a href="https://t.me/ibedestudio_bot?start=amt-49000" target="_blank" rel="noopener">@ibedestudio_bot</a> dengan QRIS &amp; no. rekening, nominal pilihanmu ikut kebawa. Bayar lewat app bank / e-wallet apa aja. Nggak bayar pun app-nya tetap jalan penuh.</p>
       </details>
       <details class="reveal">
         <summary>Worth it nggak dibanding app lain?</summary>
-        <p>Habit tracker langganan biasanya Rp25.000–Rp150.000 <em>per bulan</em>. Ini sekali Rp49.000, atau gratis kalau mau. Datanya file JSON yang bisa kamu buka tanpa app-nya.</p>
+        <p>Habit tracker langganan biasanya Rp25.000–Rp150.000 <em>per bulan</em>. Ini bayar sekali, nominalnya kamu yang tentuin — atau gratis kalau mau. Datanya file JSON yang bisa kamu buka tanpa app-nya.</p>
       </details>
     </div>
   </section>
@@ -529,6 +555,32 @@ footer a:hover{color:var(--accent)}
   bars.forEach((b, i) => {
     const w = b.style.width; b.style.width = '0px';
     setTimeout(() => { b.style.transition = 'width .9s ease'; b.style.width = w; }, 380 + i * 160);
+  });
+})();
+// pay what you can — preset / input bebas → deep link bot dengan nominal
+(() => {
+  const show = document.getElementById('amtShow');
+  const input = document.getElementById('amtIn');
+  const payBtn = document.getElementById('payBtn');
+  const chips = Array.from(document.querySelectorAll('.amt'));
+  if (!show || !input || !payBtn) return;
+  const fmt = (n) => 'Rp' + n.toLocaleString('id-ID');
+  const apply = (n) => {
+    show.textContent = fmt(n);
+    payBtn.textContent = 'Dukung ' + fmt(n) + ' via Telegram';
+    payBtn.href = 'https://t.me/ibedestudio_bot?start=amt-' + n;
+  };
+  chips.forEach((c) => c.addEventListener('click', () => {
+    chips.forEach((x) => x.classList.toggle('on', x === c));
+    input.value = '';
+    apply(Number(c.dataset.v));
+  }));
+  input.addEventListener('input', () => {
+    const n = Math.floor(Number(input.value));
+    if (n >= 1000 && n <= 100000000) {
+      chips.forEach((x) => x.classList.remove('on'));
+      apply(n);
+    }
   });
 })();
 </script>
